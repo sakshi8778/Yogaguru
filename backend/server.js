@@ -9,6 +9,10 @@ const PORT = process.env.PORT || 5000
 app.use(cors())
 // Lets Express parse incoming JSON bodies (req.body) automatically.
 app.use(express.json())
+const planRoutes = require('./plan')
+const profileRoutes = require('./profile') 
+app.use('/api/profile', profileRoutes) 
+app.use('/api/plan', planRoutes)
 // Simple health-check route. Person A's frontend polls this on load
 // to confirm the backend is reachable — cheap way to catch
 // "wrong port" or "server not started" bugs early.
