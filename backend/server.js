@@ -4,13 +4,13 @@ const cors = require('cors')
 const db = require('./db')
 const app = express()
 const PORT = process.env.PORT || 5000
+const planRoutes = require('./routes/plan')
+const profileRoutes = require('./profile') 
 // cors() with no options allows any origin during local dev.
 // We'll lock this down to our real frontend URL before deploying (Day 8).
 app.use(cors())
 // Lets Express parse incoming JSON bodies (req.body) automatically.
 app.use(express.json())
-const planRoutes = require('./plan')
-const profileRoutes = require('./profile') 
 app.use('/api/profile', profileRoutes) 
 app.use('/api/plan', planRoutes)
 // Simple health-check route. Person A's frontend polls this on load
