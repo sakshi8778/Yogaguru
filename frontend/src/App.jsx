@@ -1,30 +1,23 @@
 // src/App.jsx
-// This is a temporary "is the backend alive?" screen.
-// We will replace this with the onboarding flow on Day 2.
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import OnboardingForm from './components/OnboardingForm'
+import DailyPlan from './components/DailyPlan'
+import PlanIntensityBadge from './components/PlanIntensityBadge'
 
 function App() {
-  // healthStatus holds whatever the backend tells us.
-  // We start it as "checking..." so the user sees immediate feedback
-  // instead of a blank screen while the network request is in flight.
-  const [healthStatus, setHealthStatus] = useState('checking...')
-
-  // useEffect with an empty dependency array [] runs ONCE,
-  // right after the component first renders — exactly what we want
-  // for "check backend health on page load."
-  useEffect(() => {
-    fetch('http://localhost:5000/api/health')
-      .then((res) => res.json())
-      .then((data) => setHealthStatus(data.status))
-      .catch(() => setHealthStatus('backend unreachable'))
-  }, [])
+  // Once onboarding succeeds, this holds { userId, name, ageGroup, plan }
+  const [profile, setProfile] = useState(null)
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold">🧘 YogaGuru AI</h1>
-        <p className="text-slate-300">Backend status: {healthStatus}</p>
-      </div>
+    <div className="min-h-screen bg-slate-900 text-white">
+      {!profile ? (
+        <OnboardingForm onComplete={(data) => setProfile(data)} />
+      ) : (
+        <>
+          <PlanIntensityBadge adaptationNotes={profile.plan.adaptationNotes} />
+          <DailyPlan plan={profile.plan} />
+        </>
+      )}
     </div>
   )
 }
