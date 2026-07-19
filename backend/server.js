@@ -5,13 +5,19 @@ const db = require('./db')
 const app = express()
 const PORT = process.env.PORT || 5000
 const planRoutes = require('./routes/plan')
-const profileRoutes = require('./profile')
+const profileRoutes = require('./routes/profile')
 const poseRoutes = require('./routes/pose') 
 // cors() with no options allows any origin during local dev.
 // We'll lock this down to our real frontend URL before deploying (Day 8).
 app.use(cors())
 // Lets Express parse incoming JSON bodies (req.body) automatically.
 app.use(express.json())
+
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`)
+  next()
+})
+
 app.use('/api/profile', profileRoutes) 
 app.use('/api/plan', planRoutes)
 app.use('/api/pose', poseRoutes)
@@ -21,6 +27,6 @@ app.use('/api/pose', poseRoutes)
 app.get('/api/health', (req, res) => {
 res.json({ status: 'ok' })
 })
-app.listen(PORT, () => {
+app.listen(PORT, () => {    
 console.log(`YogaGuru backend running on http://localhost:${PORT}`)
 })

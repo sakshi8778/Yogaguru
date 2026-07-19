@@ -1,7 +1,7 @@
 const express = require('express') 
 const router = express.Router() 
-const db = require('./db') 
-const { generateDailyPlan } = require('./gemini') 
+const db = require('../db') 
+const { generateDailyPlan } = require('../gemini') 
 // POST /api/profile 
 // Saves the user's onboarding answers, then immediately asks Gemini 
 // for today's plan so the frontend gets both back in one round trip — 
@@ -47,10 +47,6 @@ router.post('/', async (req, res) => {
     })
 
 module.exports = router
-const express = require('express') 
-const router = express.Router() 
-const db = require('../db') 
-const { generateDailyPlan } = require('../gemini') 
 // POST /api/profile 
 // Saves the user's onboarding answers, then immediately asks Gemini 
 // for today's plan so the frontend gets both back in one round trip — 

@@ -16,7 +16,8 @@ router.post('/score', (req, res) => {
         return res.json({ accuracy: null, feedback: 'Scoring unavailable for this pose' }) 
     } 
     const referenceNormalized = JSON.parse(row.normalized_keypoints) 
-    const result = comparePoses(landmarks, referenceNormalized) res.json(result) 
+    const result = comparePoses(landmarks, referenceNormalized) 
+    res.json(result) 
 }) 
 
 module.exports = router
