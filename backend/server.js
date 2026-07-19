@@ -5,7 +5,8 @@ const db = require('./db')
 const app = express()
 const PORT = process.env.PORT || 5000
 const planRoutes = require('./routes/plan')
-const profileRoutes = require('./profile') 
+const profileRoutes = require('./profile')
+const poseRoutes = require('./routes/pose') 
 // cors() with no options allows any origin during local dev.
 // We'll lock this down to our real frontend URL before deploying (Day 8).
 app.use(cors())
@@ -13,6 +14,7 @@ app.use(cors())
 app.use(express.json())
 app.use('/api/profile', profileRoutes) 
 app.use('/api/plan', planRoutes)
+app.use('/api/pose', poseRoutes)
 // Simple health-check route. Person A's frontend polls this on load
 // to confirm the backend is reachable — cheap way to catch
 // "wrong port" or "server not started" bugs early.
