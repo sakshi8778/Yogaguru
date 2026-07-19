@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
             const insertPlan = db.prepare(` 
             INSERT INTO plans (user_id, plan_json) 
             VALUES (?, ?) 
-             `); 
+            `); 
              
             const result = insertUser.run( 
                 name, 
