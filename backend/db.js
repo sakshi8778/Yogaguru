@@ -18,5 +18,13 @@ created_at TEXT DEFAULT CURRENT_TIMESTAMP
  created_at TEXT DEFAULT CURRENT_TIMESTAMP, 
  FOREIGN KEY (user_id) REFERENCES users(id) 
  );
+ CREATE TABLE IF NOT EXISTS sessions ( 
+ id INTEGER PRIMARY KEY AUTOINCREMENT, 
+ user_id INTEGER NOT NULL, 
+ average_accuracy REAL, 
+ pose_scores_json TEXT NOT NULL, 
+ completed_at TEXT DEFAULT CURRENT_TIMESTAMP, 
+ FOREIGN KEY (user_id) REFERENCES users(id) 
+ ) 
 `)
 module.exports = db
