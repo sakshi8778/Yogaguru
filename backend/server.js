@@ -25,11 +25,9 @@ callback(new Error('Not allowed by CORS'))
 },
 })
 )
+       
 
 app.use(express.json())
-
-//
-
 app.use('/api/profile', profileRoutes) 
 app.use('/api/plan', planRoutes)
 app.use('/api/pose', poseRoutes)
