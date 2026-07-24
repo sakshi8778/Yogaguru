@@ -1,3 +1,5 @@
 node_modules
 .env
 *.db    
+migrations
+001_init.sql
