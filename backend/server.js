@@ -26,17 +26,13 @@ app.use(
     credentials: true
   })
 )
-       
+
 
 app.use(express.json())
-<<<<<<< HEAD
 
 //
 
 app.use('/api/profile', profileRoutes)
-=======
-app.use('/api/profile', profileRoutes) 
->>>>>>> 39260d0797ed69106f945908ded5299838311d11
 app.use('/api/plan', planRoutes)
 app.use('/api/pose', poseRoutes)
 app.use('/api/session', sessionRoutes)
