@@ -1,5 +1,9 @@
-node_modules
+node_modules/
 .env
+<<<<<<< HEAD
 *.db    
 migrations
 001_init.sql
+=======
+yogaguru.db
+>>>>>>> 3dbe7431832392f1a694d3215e2fc7bd303f4fe2
