@@ -11,16 +11,22 @@ const sessionRoutes = require('./routes/session')
 const allowedOrigins = [
   'http://localhost:5173',
   process.env.FRONTEND_URL
-].filter(Boolean)
+]
+  .filter(Boolean)
+  .map(origin => origin.trim().replace(/\/$/, ''))
 
 app.use(
   cors({
     origin: (origin, callback) => {
       // origin is undefined for same-origin/non-browser requests (e.g. Postman)
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin) {
+        return callback(null, true)
+      }
+      const normalizedOrigin = origin.trim().replace(/\/$/, '')
+      if (allowedOrigins.includes(normalizedOrigin)) {
         callback(null, true)
       } else {
-        callback(new Error('Not allowed by CORS'))
+        callback(new Error(`Origin ${origin} not allowed by CORS`))
       }
     },
     credentials: true

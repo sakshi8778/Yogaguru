@@ -1,4 +1,4 @@
-
+-- migrations/001_init.sql
 -- Run once against the new Railway Postgres instance to recreate
 -- the schema that better-sqlite3 auto-created locally. Postgres syntax
 -- differs slightly (SERIAL instead of AUTOINCREMENT, TIMESTAMP instead
@@ -28,4 +28,4 @@ user_id INTEGER REFERENCES users(id),
 average_accuracy REAL,
 pose_scores_json TEXT NOT NULL,
 completed_at TIMESTAMP DEFAULT NOW()
-📝);
+);

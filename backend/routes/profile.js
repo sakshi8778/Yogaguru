@@ -2,11 +2,19 @@ const express = require('express')
 const router = express.Router() 
 const db = require('../db') 
 const { generateDailyPlan } = require('../gemini') 
+const { rateLimit } = require('../utils/rateLimiter')
+
+const profileLimiter = rateLimit({
+    windowMs: 5 * 60 * 1000, // 5 minutes
+    max: 5,                  // limit each IP to 5 requests per windowMs
+    message: 'Too many profile creation requests. Please try again in 5 minutes.'
+})
+
 // POST /api/profile 
 // Saves the user's onboarding answers, then immediately asks Gemini 
 // for today's plan so the frontend gets both back in one round trip — 
 // avoids a second loading spinner on the very first screen. 
-router.post('/', async (req, res) => { 
+router.post('/', profileLimiter, async (req, res) => { 
     const { name, ageGroup, healthConditions, goals } = req.body 
     
     if (!name || !ageGroup) { 
