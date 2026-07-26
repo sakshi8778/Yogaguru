@@ -1,4 +1,4 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai') 
+const { GoogleGenerativeAI } = require('@google/generative-ai')
 
 const {
   buildPromptConstraints,
@@ -15,7 +15,7 @@ function getRetryDelay(err) {
   if (err.retryDelay) {
     return typeof err.retryDelay === 'number' ? err.retryDelay * 1000 : parseFloat(err.retryDelay) * 1000;
   }
-  
+
   if (err.errorDetails && Array.isArray(err.errorDetails)) {
     for (const detail of err.errorDetails) {
       if (detail.metadata && detail.metadata.retryDelay) {
@@ -46,7 +46,7 @@ function getRetryDelay(err) {
           }
         }
       }
-    } catch (_) {}
+    } catch (_) { }
   }
 
   return null;
@@ -62,12 +62,12 @@ async function callWithRetry(fn, maxRetries = 4, initialDelayMs = 6000) {
       return await fn();
     } catch (err) {
       attempt++;
-      
-      const isRateLimit = err.status === 429 || 
-                          err.statusCode === 429 ||
-                          (err.message && (err.message.includes('429') || err.message.includes('Too Many Requests') || err.message.includes('QuotaFailure'))) ||
-                          (err.statusText && err.statusText.includes('Too Many Requests'));
-      
+
+      const isRateLimit = err.status === 429 ||
+        err.statusCode === 429 ||
+        (err.message && (err.message.includes('429') || err.message.includes('Too Many Requests') || err.message.includes('QuotaFailure'))) ||
+        (err.statusText && err.statusText.includes('Too Many Requests'));
+
       if (isRateLimit && attempt <= maxRetries) {
         const delayMs = getRetryDelay(err) || (initialDelayMs * Math.pow(2, attempt - 1));
         console.warn(`[Gemini API] Quota failure (429). Retrying attempt ${attempt}/${maxRetries} after ${delayMs}ms...`);
@@ -87,7 +87,7 @@ async function generateDailyPlan({ ageGroup, healthConditions, goals }) {
   const conditions = healthConditions || []
   const userGoals = goals || []
   const { intensity, excludedPoses } = buildPromptConstraints({ ageGroup, healthConditions: conditions })
-  
+
   const fallbackPlan = {
     poses: [
       {
@@ -120,7 +120,7 @@ async function generateDailyPlan({ ageGroup, healthConditions, goals }) {
   };
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' })
     const prompt = `
 You are a certified yoga instructor. Create a 5-pose daily yoga sequence
 for a person in age group "${ageGroup}" with goals: ${userGoals.join(', ')}.
@@ -144,7 +144,7 @@ Respond with ONLY valid JSON, no markdown fences, in this exact shape:
   } catch (err) {
     console.error(`[Gemini API] Persistent failure calling Gemini API:`, err);
     console.warn(`[Gemini API] Falling back to safe, gentle default sequence.`);
-    
+
     // Safety filter the fallback poses just in case
     fallbackPlan.poses = filterUnsafePoses(fallbackPlan.poses, excludedPoses)
     return fallbackPlan
