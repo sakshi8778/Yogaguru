@@ -7,15 +7,16 @@ db.exec(`
      pose_name TEXT UNIQUE NOT NULL, 
      normalized_keypoints TEXT NOT NULL 
      ) 
-   `) 
+   `).catch(err => console.error("Error creating reference_poses table:", err))
      
-    function seedPose(poseName, rawLandmarks) { 
-        const normalized = normalizeKeypoints(rawLandmarks) 
-        db.prepare(` 
-            INSERT INTO reference_poses (pose_name, normalized_keypoints) 
-            VALUES (?, ?) 
-            ON CONFLICT(pose_name) DO UPDATE SET normalized_keypoints = 
-            excluded.normalized_keypoints 
-            `).run(poseName, JSON.stringify(normalized))
-        }
-        module.exports = { seedPose }
+async function seedPose(poseName, rawLandmarks) { 
+    const normalized = normalizeKeypoints(rawLandmarks) 
+    await db.prepare(` 
+        INSERT INTO reference_poses (pose_name, normalized_keypoints) 
+        VALUES (?, ?) 
+        ON CONFLICT(pose_name) DO UPDATE SET normalized_keypoints = 
+        excluded.normalized_keypoints 
+        `).run(poseName, JSON.stringify(normalized))
+}
+
+module.exports = { seedPose }

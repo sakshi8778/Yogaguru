@@ -30,7 +30,7 @@ router.post('/', profileLimiter, async (req, res) => {
             VALUES (?, ?) 
             `); 
              
-            const result = insertUser.run( 
+            const result = await insertUser.run( 
                 name, 
                 ageGroup, 
                 JSON.stringify(healthConditions || []), 
@@ -39,7 +39,7 @@ router.post('/', profileLimiter, async (req, res) => {
             const UserID = result.lastInsertRowid;
             const plan = await generateDailyPlan({ ageGroup, healthConditions, goals }) 
 
-            insertPlan.run(result.lastInsertRowid, JSON.stringify(plan))
+            await insertPlan.run(result.lastInsertRowid, JSON.stringify(plan))
 
             res.json({ 
                 

@@ -9,29 +9,41 @@ const profileRoutes = require('./routes/profile')
 const poseRoutes = require('./routes/pose')
 const sessionRoutes = require('./routes/session')
 const allowedOrigins = [
+  'http://localhost:3000',
   'http://localhost:5173',
+  'https://yogaguru-lovat.vercel.app',
   process.env.FRONTEND_URL
 ]
   .filter(Boolean)
   .map(origin => origin.trim().replace(/\/$/, ''))
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // origin is undefined for same-origin/non-browser requests (e.g. Postman)
-      if (!origin) {
-        return callback(null, true)
-      }
-      const normalizedOrigin = origin.trim().replace(/\/$/, '')
-      if (allowedOrigins.includes(normalizedOrigin)) {
-        callback(null, true)
-      } else {
-        callback(new Error(`Origin ${origin} not allowed by CORS`))
-      }
-    },
-    credentials: true
-  })
-)
+const corsOptions = {
+  origin: (origin, callback) => {
+    // origin is undefined for same-origin/non-browser requests (e.g. Postman)
+    if (!origin) {
+      return callback(null, true)
+    }
+    const normalizedOrigin = origin.trim().replace(/\/$/, '')
+    if (allowedOrigins.includes(normalizedOrigin)) {
+      callback(null, true)
+    } else {
+      callback(null, false)
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}
+
+app.use(cors(corsOptions))
+
+// Handle preflight OPTIONS requests for all routes
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204)
+  }
+  next()
+})
 
 
 app.use(express.json())
