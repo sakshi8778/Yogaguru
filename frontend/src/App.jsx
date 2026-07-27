@@ -27,7 +27,6 @@ function App() {
         })
         .catch((err) => {
           console.error('Error fetching plan:', err)
-          // If no plan, we generate a placeholder or let user edit profile to regenerate
           setPlan(null)
         })
         .finally(() => {
@@ -53,12 +52,12 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center gap-4">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col items-center justify-center gap-4 transition-colors duration-200">
         <svg className="animate-spin h-10 w-10 text-emerald-500" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
         </svg>
-        <p className="text-slate-400 text-sm">Aligning your energy...</p>
+        <p className="text-slate-500 dark:text-slate-400 text-sm">Aligning your energy...</p>
       </div>
     )
   }
@@ -66,32 +65,32 @@ function App() {
   // 1. Not logged in: Show premium login page
   if (!user) {
     return (
-      <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex items-center justify-center p-4 relative overflow-hidden transition-colors duration-200">
         {/* Decorative blur backgrounds */}
         <div className="absolute w-[500px] h-[500px] rounded-full bg-emerald-500/5 -top-40 -left-40 blur-[120px] pointer-events-none" />
         <div className="absolute w-[500px] h-[500px] rounded-full bg-teal-500/5 -bottom-40 -right-40 blur-[120px] pointer-events-none" />
 
-        <div className="w-full max-w-md bg-slate-900/60 border border-slate-850/80 backdrop-blur-md rounded-3xl p-8 text-center space-y-8 shadow-2xl relative z-10">
+        <div className="w-full max-w-md bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-850/80 backdrop-blur-md rounded-3xl p-8 text-center space-y-8 shadow-2xl relative z-10 transition-colors duration-200">
           <div className="space-y-3">
             <span className="text-5xl block animate-bounce duration-[2000ms]">🧘‍♀️</span>
-            <h1 className="text-3xl font-extrabold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-extrabold bg-gradient-to-r from-emerald-500 to-teal-500 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
               YogaGuru
             </h1>
-            <p className="text-slate-400 text-sm">Your AI-powered personalized yoga companion</p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">Your AI-powered personalized yoga companion</p>
           </div>
 
           {/* Benefits */}
-          <ul className="text-left bg-slate-950/40 p-5 rounded-2xl border border-slate-850/60 space-y-3.5 text-xs text-slate-350">
+          <ul className="text-left bg-slate-100 dark:bg-slate-950/40 p-5 rounded-2xl border border-slate-200 dark:border-slate-850/60 space-y-3.5 text-xs text-slate-700 dark:text-slate-350 transition-colors duration-200">
             <li className="flex items-center gap-2.5">
-              <span className="text-emerald-400 text-sm">🎯</span>
+              <span className="text-emerald-500 dark:text-emerald-400 text-sm">🎯</span>
               <span>Pose recommendations personalized for your targets.</span>
             </li>
             <li className="flex items-center gap-2.5">
-              <span className="text-emerald-400 text-sm">🏥</span>
+              <span className="text-emerald-500 dark:text-emerald-400 text-sm">🏥</span>
               <span>Automatic safety filters to protect joints and pain points.</span>
             </li>
             <li className="flex items-center gap-2.5">
-              <span className="text-emerald-400 text-sm">⏱️</span>
+              <span className="text-emerald-500 dark:text-emerald-400 text-sm">⏱️</span>
               <span>Intelligent hold time scaling adjusted to your age.</span>
             </li>
           </ul>
@@ -99,7 +98,7 @@ function App() {
           <div className="space-y-4">
             <button
               onClick={handleLogin}
-              className="w-full py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-950 font-bold transition-all duration-300 shadow-lg shadow-white/5 cursor-pointer flex items-center justify-center gap-3 active:scale-[0.98]"
+              className="w-full py-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-50 text-white dark:text-slate-950 font-bold transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer flex items-center justify-center gap-3 active:scale-[0.98] border border-slate-200 dark:border-transparent"
             >
               {/* Google G logo */}
               <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -112,13 +111,13 @@ function App() {
             </button>
 
             {isMockAuth && (
-              <p className="text-[10px] text-slate-500 bg-slate-950 p-2.5 rounded-xl border border-slate-850">
+              <p className="text-[10px] text-slate-500 dark:text-slate-500 bg-slate-100 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200 dark:border-slate-850 transition-colors duration-200">
                 🔧 <strong>Development Mode:</strong> Live Firebase API Key not detected. Google Login will automatically sign you in with a mock profile.
               </p>
             )}
 
             {authError && (
-              <p className="text-red-400 text-xs mt-2 font-medium bg-red-950/20 py-2 rounded-lg border border-red-500/20">
+              <p className="text-red-600 dark:text-red-400 text-xs mt-2 font-medium bg-red-50 dark:bg-red-950/20 py-2 rounded-lg border border-red-200 dark:border-red-500/20">
                 {authError}
               </p>
             )}
@@ -131,7 +130,7 @@ function App() {
   // 2. Logged in but not onboarded: Show onboarding wizard
   if (user.ageGroup === 'unonboarded') {
     return (
-      <div className="min-h-screen bg-slate-950 text-white flex flex-col justify-center p-4">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col justify-center p-4 transition-colors duration-200">
         <OnboardingWizard onComplete={handleOnboardingComplete} />
       </div>
     )
@@ -139,7 +138,7 @@ function App() {
 
   // 3. Logged in and Onboarded: Show app dashboard
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex flex-col">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col transition-colors duration-200">
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -148,14 +147,14 @@ function App() {
 
       <main className="flex-1 w-full max-w-6xl mx-auto py-6">
         {activeTab === 'daily-plan' && (
-          <div className="p-4 space-y-6">
+          <div className="p-4 space-y-6 animate-fade-in">
             {fetchingPlan ? (
               <div className="flex flex-col items-center justify-center py-16 gap-3">
                 <svg className="animate-spin h-8 w-8 text-emerald-500" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
-                <p className="text-slate-400 text-xs">Aligning today's recommendations...</p>
+                <p className="text-slate-500 dark:text-slate-400 text-xs">Aligning today's recommendations...</p>
               </div>
             ) : plan ? (
               <>
@@ -163,8 +162,8 @@ function App() {
                 <DailyPlan plan={plan} />
               </>
             ) : (
-              <div className="text-center py-16 bg-slate-900/40 border border-slate-850 rounded-2xl">
-                <p className="text-slate-400 text-sm">Failed to generate daily plan. Try updating your profile parameters.</p>
+              <div className="text-center py-16 bg-white dark:bg-slate-900/40 border border-slate-205 dark:border-slate-850 rounded-2xl transition-colors duration-200">
+                <p className="text-slate-500 dark:text-slate-400 text-sm">Failed to generate daily plan. Try updating your profile parameters.</p>
               </div>
             )}
           </div>
@@ -176,4 +175,5 @@ function App() {
   )
 }
 
-export default App
+export default App
+

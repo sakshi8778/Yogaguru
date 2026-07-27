@@ -107,19 +107,19 @@ function OnboardingWizard({ onComplete }) {
   // Step 1: Name Input
   const renderStep1 = () => (
     <div className="space-y-6">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-emerald-400">Welcome to YogaGuru!</h2>
-        <p className="text-slate-400 text-sm mt-2">Let's start by getting to know you. What should we call you?</p>
+      <div className="text-center animate-in fade-in duration-200">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Welcome to YogaGuru!</h2>
+        <p className="text-slate-555 dark:text-slate-400 text-sm mt-2">Let's start by getting to know you. What should we call you?</p>
       </div>
-      <div className="space-y-2">
-        <label className="block text-slate-300 text-sm font-medium">Your Name</label>
+      <div className="space-y-2 text-left">
+        <label className="block text-slate-700 dark:text-slate-350 text-sm font-medium">Your Name</label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g. John Doe"
           required
-          className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-300"
+          className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:bg-slate-800 dark:border-slate-700 dark:text-white transition-all duration-300"
         />
       </div>
     </div>
@@ -129,15 +129,15 @@ function OnboardingWizard({ onComplete }) {
   const ageOptions = [
     { key: 'kid', label: 'Kid', icon: '🧒', desc: 'Up to 12 years' },
     { key: 'teen', label: 'Teen', icon: '🧑', desc: '13 to 19 years' },
-    { key: 'adult', label: 'Adult', icon: '🧑‍🦰', desc: '20 to 60 years' },
+    { key: 'adult', label: 'Adult', icon: '🧑', desc: '20 to 60 years' },
     { key: 'old', label: 'Old', icon: '🧓', desc: '60+ years' }
   ];
 
   const renderStep2 = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-in fade-in duration-200">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-emerald-400">What is your age group?</h2>
-        <p className="text-slate-400 text-sm mt-2">This helps us scale physical intensity and hold times appropriately.</p>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">What is your age group?</h2>
+        <p className="text-slate-555 dark:text-slate-400 text-sm mt-2">This helps us scale physical intensity and hold times appropriately.</p>
       </div>
       <div className="grid grid-cols-2 gap-4">
         {ageOptions.map((opt) => {
@@ -149,14 +149,14 @@ function OnboardingWizard({ onComplete }) {
               onClick={() => setAgeGroup(opt.key)}
               className={`p-4 rounded-xl border text-left flex flex-col justify-between h-32 transition-all duration-300 cursor-pointer hover:translate-y-[-2px] ${
                 selected
-                  ? 'bg-slate-800 border-emerald-500 ring-2 ring-emerald-500/20'
-                  : 'bg-slate-800/40 border-slate-700 hover:border-slate-600'
+                  ? 'bg-emerald-50/50 dark:bg-slate-800 border-emerald-500 ring-2 ring-emerald-500/20 text-slate-900 dark:text-white'
+                  : 'bg-slate-50 border-slate-200 hover:border-slate-300 text-slate-700 dark:bg-slate-800/40 dark:border-slate-700 dark:hover:border-slate-600 dark:text-slate-300'
               }`}
             >
               <span className="text-3xl">{opt.icon}</span>
               <div>
-                <h4 className="font-semibold text-white">{opt.label}</h4>
-                <p className="text-slate-400 text-xs mt-0.5">{opt.desc}</p>
+                <h4 className="font-semibold text-slate-900 dark:text-white">{opt.label}</h4>
+                <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">{opt.desc}</p>
               </div>
             </button>
           );
@@ -174,10 +174,10 @@ function OnboardingWizard({ onComplete }) {
   ];
 
   const renderStep3 = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-in fade-in duration-200">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-emerald-400">Any health concerns or pain?</h2>
-        <p className="text-slate-400 text-sm mt-2">Select all that apply. We will filter out poses that could exacerbate these areas.</p>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Any health concerns or pain?</h2>
+        <p className="text-slate-555 dark:text-slate-400 text-sm mt-2">Select all that apply. We will filter out poses that could exacerbate these areas.</p>
       </div>
       <div className="grid grid-cols-2 gap-4">
         {healthOptions.map((opt) => {
@@ -189,14 +189,14 @@ function OnboardingWizard({ onComplete }) {
               onClick={() => toggleHealth(opt.key)}
               className={`p-4 rounded-xl border text-left flex flex-col justify-between h-32 transition-all duration-300 cursor-pointer hover:translate-y-[-2px] ${
                 selected
-                  ? 'bg-slate-800 border-emerald-500 ring-2 ring-emerald-500/20'
-                  : 'bg-slate-800/40 border-slate-700 hover:border-slate-600'
+                  ? 'bg-red-50/50 dark:bg-slate-800 border-red-500/50 ring-2 ring-red-500/10 text-slate-900 dark:text-white'
+                  : 'bg-slate-50 border-slate-200 hover:border-slate-300 text-slate-700 dark:bg-slate-800/40 dark:border-slate-700 dark:hover:border-slate-600 dark:text-slate-300'
               }`}
             >
               <span className="text-3xl">{opt.icon}</span>
               <div>
-                <h4 className="font-semibold text-white">{opt.label}</h4>
-                <p className="text-slate-400 text-xs mt-0.5">{opt.desc}</p>
+                <h4 className="font-semibold text-slate-900 dark:text-white">{opt.label}</h4>
+                <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">{opt.desc}</p>
               </div>
             </button>
           );
@@ -214,10 +214,10 @@ function OnboardingWizard({ onComplete }) {
   ];
 
   const renderStep4 = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-in fade-in duration-200">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-emerald-400">What is your primary yoga focus?</h2>
-        <p className="text-slate-400 text-sm mt-2">Choose your objectives. We will prioritize poses that align with your targets.</p>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">What is your primary yoga focus?</h2>
+        <p className="text-slate-555 dark:text-slate-400 text-sm mt-2">Choose your objectives. We will prioritize poses that align with your targets.</p>
       </div>
       <div className="grid grid-cols-2 gap-4">
         {goalOptions.map((opt) => {
@@ -229,14 +229,14 @@ function OnboardingWizard({ onComplete }) {
               onClick={() => toggleGoal(opt.key)}
               className={`p-4 rounded-xl border text-left flex flex-col justify-between h-32 transition-all duration-300 cursor-pointer hover:translate-y-[-2px] ${
                 selected
-                  ? 'bg-slate-800 border-emerald-500 ring-2 ring-emerald-500/20'
-                  : 'bg-slate-800/40 border-slate-700 hover:border-slate-600'
+                  ? 'bg-emerald-50/50 dark:bg-slate-800 border-emerald-500 ring-2 ring-emerald-500/20 text-slate-900 dark:text-white'
+                  : 'bg-slate-50 border-slate-200 hover:border-slate-300 text-slate-700 dark:bg-slate-800/40 dark:border-slate-700 dark:hover:border-slate-600 dark:text-slate-300'
               }`}
             >
               <span className="text-3xl">{opt.icon}</span>
               <div>
-                <h4 className="font-semibold text-white">{opt.label}</h4>
-                <p className="text-slate-400 text-xs mt-0.5">{opt.desc}</p>
+                <h4 className="font-semibold text-slate-900 dark:text-white">{opt.label}</h4>
+                <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">{opt.desc}</p>
               </div>
             </button>
           );
@@ -249,14 +249,14 @@ function OnboardingWizard({ onComplete }) {
   const progressPercent = (step / totalSteps) * 100;
 
   return (
-    <div className="max-w-xl mx-auto my-12 p-8 bg-slate-900/60 backdrop-blur-md border border-slate-800 rounded-2xl shadow-xl space-y-8">
+    <div className="max-w-xl w-full mx-auto my-12 p-8 bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl space-y-8 transition-colors duration-200 text-slate-900 dark:text-white">
       {/* Progress Bar */}
-      <div className="space-y-2">
-        <div className="flex justify-between text-xs text-slate-400">
+      <div className="space-y-2 text-left">
+        <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
           <span>Step {step} of {totalSteps}</span>
           <span>{Math.round(progressPercent)}% Complete</span>
         </div>
-        <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+        <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden transition-colors duration-200">
           <div
             className="h-full bg-emerald-500 rounded-full transition-all duration-500 ease-out"
             style={{ width: `${progressPercent}%` }}
@@ -272,18 +272,18 @@ function OnboardingWizard({ onComplete }) {
         {step === 4 && renderStep4()}
 
         {error && (
-          <p className="text-red-400 text-sm mt-4 text-center bg-red-950/20 py-2 px-4 rounded-lg border border-red-500/20">
+          <p className="text-red-650 dark:text-red-400 text-sm mt-4 text-center bg-red-50 dark:bg-red-950/20 py-2 px-4 rounded-lg border border-red-200 dark:border-red-500/20">
             {error}
           </p>
         )}
 
         {/* Navigation Buttons */}
-        <div className="flex justify-between items-center mt-8 pt-6 border-t border-slate-800/80">
+        <div className="flex justify-between items-center mt-8 pt-6 border-t border-slate-200 dark:border-slate-800/80 transition-colors duration-200">
           <button
             type="button"
             onClick={handleBack}
             disabled={step === 1 || loading}
-            className="px-6 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800 disabled:opacity-30 disabled:hover:bg-transparent cursor-pointer font-medium transition-all"
+            className="px-6 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 disabled:opacity-30 disabled:hover:bg-transparent cursor-pointer font-medium transition-all"
           >
             Back
           </button>
