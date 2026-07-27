@@ -8,6 +8,14 @@ const planRoutes = require('./routes/plan')
 const profileRoutes = require('./routes/profile')
 const poseRoutes = require('./routes/pose')
 const sessionRoutes = require('./routes/session')
+const authRoutes = require('./routes/auth')
+
+// Run database migrations on boot
+const { runMigration } = require('./migrations/002_auth_fields')
+runMigration().catch(err => {
+  console.error('Failed to run database migrations on startup:', err)
+})
+
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5173',
@@ -50,6 +58,7 @@ app.use(express.json())
 
 //
 
+app.use('/api/auth', authRoutes)
 app.use('/api/profile', profileRoutes)
 app.use('/api/plan', planRoutes)
 app.use('/api/pose', poseRoutes)
@@ -62,4 +71,4 @@ app.get('/api/health', (req, res) => {
 })
 app.listen(PORT, () => {
   console.log(`YogaGuru backend running on http://localhost:${PORT}`)
-})
+})
