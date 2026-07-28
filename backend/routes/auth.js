@@ -6,7 +6,7 @@ const db = require('../db');
 // Helper to decode Firebase token. In development, we decode signature-less for convenience.
 // In production, we decode and inspect claims.
 function decodeFirebaseToken(token) {
-  if (token === 'mock-id-token') {
+  if (token === 'mock-id-token' && process.env.NODE_ENV === 'development') {
     return {
       sub: 'mock-google-uid-123',
       email: 'yogi.tester@gmail.com',
