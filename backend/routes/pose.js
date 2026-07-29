@@ -3,6 +3,20 @@ const router = express.Router()
 const db = require('../db') 
 const { comparePoses } = require('../utils/poseSimilarity') 
 const { POSES } = require('../utils/posesData')
+const { distance } = require('fastest-levenshtein')
+const { uploadPoseImage } = require('../lib/cloudinary')
+const { generatePoseImage } = require('../lib/geminiImage')
+
+
+function slugify(name) {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-');
+}
+
 
 // Personalization helper function
 function getPersonalizedPoses(user) {
@@ -144,6 +158,81 @@ router.post('/score', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' })
     }
 }) 
+
+// GET /api/pose/image/:poseName
+router.get('/image/:poseName', async (req, res) => {
+  const { poseName } = req.params
+  if (!poseName) {
+    return res.status(400).json({ error: 'Pose name is required' })
+  }
+
+  const slug = slugify(poseName)
+
+  try {
+    // 1. Look up an EXACT match on pose_name_slug in pose_images first
+    const exactMatch = await db.prepare('SELECT image_url FROM pose_images WHERE pose_name_slug = ?').get(slug)
+    if (exactMatch) {
+      return res.json({ imageUrl: exactMatch.image_url, source: 'cache' })
+    }
+
+    // 2. Do a lightweight fuzzy match against existing pose_name_slug values
+    const allImages = await db.prepare('SELECT pose_name_slug, image_url FROM pose_images').all()
+    let bestMatch = null
+    let minDistance = Infinity
+    const MAX_FUZZY_DISTANCE = 3 // Levenshtein threshold
+
+    for (const img of allImages) {
+      const dist = distance(slug, img.pose_name_slug)
+      if (dist < minDistance) {
+        minDistance = dist
+        bestMatch = img
+      }
+    }
+
+    if (bestMatch && minDistance <= MAX_FUZZY_DISTANCE) {
+      console.log(`[Fuzzy Match] Reusing image for slug "${slug}" from "${bestMatch.pose_name_slug}" (distance: ${minDistance})`)
+      return res.json({ imageUrl: bestMatch.image_url, source: 'fuzzy-match' })
+    }
+
+    // 3. Generate live via gemini-2.5-flash-image
+    const pose = POSES.find(p => slugify(p.name) === slug)
+    const poseInstructions = pose ? pose.instructions : `Focus on correct posture, steady breathing, and balance for ${poseName}.`
+
+    let imageBuffer
+    try {
+      imageBuffer = await generatePoseImage(poseName, poseInstructions)
+    } catch (apiErr) {
+      console.error('[Gemini Image Generation Error]:', apiErr)
+      return res.status(502).json({ error: 'Could not generate reference image for this pose' })
+    }
+
+    // 4. Upload to Cloudinary
+    let secureUrl
+    try {
+      secureUrl = await uploadPoseImage(imageBuffer, slug)
+    } catch (cloudErr) {
+      console.error('[Cloudinary Upload Error]:', cloudErr)
+      return res.status(502).json({ error: 'Could not upload reference image to cloud storage' })
+    }
+
+    // 5. Insert into database (ON CONFLICT DO UPDATE on pose_name_slug)
+    try {
+      await db.prepare(`
+        INSERT INTO pose_images (pose_name, pose_name_slug, image_url) 
+        VALUES (?, ?, ?) 
+        ON CONFLICT (pose_name_slug) 
+        DO UPDATE SET image_url = excluded.image_url
+      `).run(poseName, slug, secureUrl)
+    } catch (dbErr) {
+      console.error('[Database Insert Error]:', dbErr)
+    }
+
+    return res.json({ imageUrl: secureUrl, source: 'generated' })
+  } catch (err) {
+    console.error(`[GET /api/pose/image/:poseName] Error:`, err)
+    return res.status(500).json({ error: 'Internal server error while retrieving pose image' })
+  }
+})
 
 module.exports = router
 
