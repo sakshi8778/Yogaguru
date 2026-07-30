@@ -36,17 +36,22 @@ export function AuthProvider({ children }) {
 
   // Restore user session on mount
   useEffect(() => {
-    const storedUser = localStorage.getItem('yogaguru_user');
-    const storedToken = localStorage.getItem('yogaguru_token');
-    
-    if (storedUser && storedToken) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (err) {
-        console.error('Failed to parse stored user:', err);
+    try {
+      const storedUser = localStorage.getItem('yogaguru_user');
+      const storedToken = localStorage.getItem('yogaguru_token');
+      
+      if (storedUser && storedToken) {
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch (err) {
+          console.error('Failed to parse stored user:', err);
+        }
       }
+    } catch (err) {
+      console.error('Failed to read from localStorage:', err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   const loginWithGoogle = async () => {
